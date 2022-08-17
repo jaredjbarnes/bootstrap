@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react';
-import { ReadonlyObservableValue } from '../observable_value';
+import { ReadonlyObservableValue } from 'ui-hex';
 import { useUpdate } from './use_update';
 
 export function useAsyncError<TError>(

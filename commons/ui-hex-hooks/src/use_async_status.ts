@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useAsyncValue } from "./use_async_value";
-import { ReadonlyAsyncActionRunner, Status } from "../async_action_runner";
-import { ReadonlyObservableValue } from "../observable_value";
+import {
+  ReadonlyAsyncActionRunner,
+  Status,
+  ReadonlyObservableValue,
+} from "ui-hex";
 
 export interface StatusHelper {
   status: Status;
@@ -12,9 +15,7 @@ export interface StatusHelper {
 }
 
 export function useAsyncStatus(
-  runner:
-    | ReadonlyAsyncActionRunner<any>
-    | ReadonlyObservableValue<Status, any>
+  runner: ReadonlyAsyncActionRunner<any> | ReadonlyObservableValue<Status, any>
 ) {
   const status = useAsyncValue("status" in runner ? runner.status : runner);
 

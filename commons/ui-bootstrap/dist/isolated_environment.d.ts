@@ -1,6 +1,6 @@
 import { App } from "./app";
 import { EnvironmentState } from "./environment_state";
-import { ReadonlyAsyncActionRunner } from "./hex/async_action_runner";
+import { ReadonlyAsyncActionRunner } from "ui-hex";
 export declare class IsolatedEnvironment<TConfig> implements EnvironmentState<TConfig> {
     private _mountingBroadcastRunner;
     private _iframe;

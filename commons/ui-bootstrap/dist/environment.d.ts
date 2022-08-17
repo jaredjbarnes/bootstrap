@@ -1,5 +1,5 @@
 import { App } from "./app";
-import { ReadonlyAsyncActionRunner } from "./hex/async_action_runner";
+import { ReadonlyAsyncActionRunner } from "ui-hex";
 export declare class Environment<TConfig> {
     private _slot;
     private _moduleBroadcast;

@@ -2,8 +2,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var react = require('react');
-
 function noop() { }
 class WeakPromise extends Promise {
     constructor(callback) {
@@ -151,7 +149,7 @@ class DistinctValue extends ObservableValue {
     }
 }
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -176,13 +174,13 @@ function __awaiter(thisArg, _arguments, P, generator) {
     });
 }
 
-var Status;
+exports.Status = void 0;
 (function (Status) {
     Status["INITIAL"] = "initial";
     Status["PENDING"] = "pending";
     Status["ERROR"] = "error";
     Status["SUCCESS"] = "success";
-})(Status || (Status = {}));
+})(exports.Status || (exports.Status = {}));
 class CancelledError extends Error {
     constructor(message) {
         super(message);
@@ -206,7 +204,7 @@ class AsyncActionRunner extends ObservableValue {
             setError: this.setError,
         });
         this._initialValue = initialValue;
-        this.status = new ObservableValue(Status.INITIAL);
+        this.status = new ObservableValue(exports.Status.INITIAL);
     }
     execute(action) {
         return this._internalState.execute(action);
@@ -249,7 +247,7 @@ class State {
 }
 class InitialState extends State {
     getName() {
-        return Status.INITIAL;
+        return exports.Status.INITIAL;
     }
     execute(action) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -299,12 +297,12 @@ class PendingState extends State {
         return Promise.reject(new Error("Invalid Action: Cannot retry a runner that is pending."));
     }
     getName() {
-        return Status.PENDING;
+        return exports.Status.PENDING;
     }
 }
 class SuccessState extends InitialState {
     getName() {
-        return Status.SUCCESS;
+        return exports.Status.SUCCESS;
     }
     retry() {
         return Promise.reject(new Error("Invalid Action: Cannot retry a runner that is successful."));
@@ -317,144 +315,12 @@ class ErrorState extends InitialState {
         return initialState.execute(this.context.action);
     }
     getName() {
-        return Status.ERROR;
+        return exports.Status.ERROR;
     }
-}
-
-function useAsyncErrorEffect(callback, observableValue) {
-    const callbackRef = react.useRef(callback);
-    const versionRef = react.useRef(observableValue.errorVersion);
-    react.useEffect(() => {
-        callbackRef.current = callback;
-    }, [callback]);
-    react.useEffect(() => {
-        const unsubscribe = observableValue.onError((error) => {
-            callbackRef.current(error);
-        });
-        if (versionRef.current !== observableValue.errorVersion) {
-            callbackRef.current(observableValue.getError());
-        }
-        return () => {
-            unsubscribe();
-        };
-    }, [observableValue]);
-    react.useEffect(() => {
-        callbackRef.current(observableValue.getError());
-    }, [observableValue]);
-}
-
-const updateReducer = (num) => (num + 1) % 1000000;
-const useUpdate = () => {
-    const [, update] = react.useReducer(updateReducer, 0);
-    return update;
-};
-
-function useAsyncError(observableValue) {
-    const update = useUpdate();
-    const versionRef = react.useRef(observableValue.errorVersion);
-    react.useLayoutEffect(() => {
-        const subscription = observableValue.onError(update);
-        if (versionRef.current !== observableValue.valueVersion) {
-            update();
-        }
-        return () => subscription();
-    }, [observableValue, update]);
-    return observableValue.getError();
-}
-
-function useAsyncValue(observableValue) {
-    const update = useUpdate();
-    const versionRef = react.useRef(observableValue.valueVersion);
-    react.useLayoutEffect(() => {
-        const unsubscribe = observableValue.onChange(update);
-        if (versionRef.current !== observableValue.valueVersion) {
-            update();
-        }
-        return () => unsubscribe();
-    }, [observableValue, update]);
-    return observableValue.getValue();
-}
-
-function useAsyncStatus(runner) {
-    const status = useAsyncValue("status" in runner ? runner.status : runner);
-    // We use the same object to reduce memory churn.
-    const [statusObject] = react.useState(() => ({
-        status: status,
-        isInitial: status === Status.INITIAL,
-        isPending: status === Status.PENDING,
-        isSuccess: status === Status.SUCCESS,
-        isError: status === Status.ERROR,
-    }));
-    statusObject.status = status;
-    statusObject.isInitial = status === Status.INITIAL;
-    statusObject.isPending = status === Status.PENDING;
-    statusObject.isSuccess = status === Status.SUCCESS;
-    statusObject.isError = status === Status.ERROR;
-    return statusObject;
-}
-
-function useAsyncState(asyncActionRunner) {
-    const value = useAsyncValue(asyncActionRunner);
-    const error = useAsyncError(asyncActionRunner);
-    const status = useAsyncStatus(asyncActionRunner);
-    return Object.assign({ value,
-        error }, status);
-}
-
-function useAsyncValueEffect(callback, observableValue) {
-    const callbackRef = react.useRef(callback);
-    const version = react.useRef(observableValue.valueVersion);
-    react.useLayoutEffect(() => {
-        callbackRef.current = callback;
-    }, [callback]);
-    react.useLayoutEffect(() => {
-        const unsubscribe = observableValue.onChange((value) => {
-            callbackRef.current(value);
-        });
-        if (version.current !== observableValue.valueVersion) {
-            callbackRef.current(observableValue.getValue());
-        }
-        return () => {
-            unsubscribe();
-        };
-    }, [observableValue]);
-    react.useLayoutEffect(() => {
-        callbackRef.current(observableValue.getValue());
-    }, [observableValue]);
-}
-
-function useAsyncStatusEffect(callback, runner) {
-    const callbackRef = react.useRef(callback);
-    // We use the same object to reduce memory churn.
-    const [statusObject] = react.useState(() => {
-        return {
-            status: Status.INITIAL,
-            isInitial: true,
-            isPending: false,
-            isSuccess: false,
-            isError: false,
-        };
-    });
-    return useAsyncValueEffect(status => {
-        statusObject.status = status;
-        statusObject.isInitial = status === Status.INITIAL;
-        statusObject.isPending = status === Status.PENDING;
-        statusObject.isSuccess = status === Status.SUCCESS;
-        statusObject.isError = status === Status.ERROR;
-        callbackRef.current(statusObject);
-    }, runner.status);
 }
 
 exports.AsyncActionRunner = AsyncActionRunner;
 exports.DistinctValue = DistinctValue;
 exports.ObservableValue = ObservableValue;
 exports.WeakPromise = WeakPromise;
-exports.useAsyncError = useAsyncError;
-exports.useAsyncErrorEffect = useAsyncErrorEffect;
-exports.useAsyncState = useAsyncState;
-exports.useAsyncStatus = useAsyncStatus;
-exports.useAsyncStatusEffect = useAsyncStatusEffect;
-exports.useAsyncValue = useAsyncValue;
-exports.useAsyncValueEffect = useAsyncValueEffect;
-exports.useUpdate = useUpdate;
 //# sourceMappingURL=index.js.map

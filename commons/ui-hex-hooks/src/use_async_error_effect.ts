@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { ReadonlyObservableValue } from "../observable_value";
+import { ReadonlyObservableValue } from "ui-hex";
 
 export function useAsyncErrorEffect<TError>(
   callback: (error: TError | null) => void,

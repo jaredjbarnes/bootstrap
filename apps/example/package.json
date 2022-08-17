@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "example",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "jest",
+    "build": "node ./esbuild.js",
+    "storybook": "start-storybook -p 6006"
+  },
+  "dependencies": {
+    "ui-hex": "0.0.2",
+    "clsx": "^1.2.1",
+    "esbuild": "^0.14.49",
+    "motion-ux": "^7.2.12",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-jss": "^10.9.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-interactions": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/builder-webpack4": "^6.5.9",
+    "@storybook/manager-webpack4": "^6.5.9",
+    "@storybook/react": "^6.5.9",
+    "@storybook/testing-library": "^0.0.13",
+    "babel-loader": "^8.2.5",
+    "jest": "^28.1.3"
+  }
+}

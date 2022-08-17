@@ -1,4 +1,4 @@
-import { ReadonlyAsyncActionRunner } from "../async_action_runner";
+import { ReadonlyAsyncActionRunner } from 'ui-hex';
 import { useAsyncValue } from "./use_async_value";
 import { useAsyncError } from "./use_async_error";
 import { useAsyncStatus } from "./use_async_status";

@@ -1,5 +1,3 @@
-import { useRef, useEffect, useReducer, useLayoutEffect, useState } from 'react';
-
 function noop() { }
 class WeakPromise extends Promise {
     constructor(callback) {
@@ -147,7 +145,7 @@ class DistinctValue extends ObservableValue {
     }
 }
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -317,129 +315,5 @@ class ErrorState extends InitialState {
     }
 }
 
-function useAsyncErrorEffect(callback, observableValue) {
-    const callbackRef = useRef(callback);
-    const versionRef = useRef(observableValue.errorVersion);
-    useEffect(() => {
-        callbackRef.current = callback;
-    }, [callback]);
-    useEffect(() => {
-        const unsubscribe = observableValue.onError((error) => {
-            callbackRef.current(error);
-        });
-        if (versionRef.current !== observableValue.errorVersion) {
-            callbackRef.current(observableValue.getError());
-        }
-        return () => {
-            unsubscribe();
-        };
-    }, [observableValue]);
-    useEffect(() => {
-        callbackRef.current(observableValue.getError());
-    }, [observableValue]);
-}
-
-const updateReducer = (num) => (num + 1) % 1000000;
-const useUpdate = () => {
-    const [, update] = useReducer(updateReducer, 0);
-    return update;
-};
-
-function useAsyncError(observableValue) {
-    const update = useUpdate();
-    const versionRef = useRef(observableValue.errorVersion);
-    useLayoutEffect(() => {
-        const subscription = observableValue.onError(update);
-        if (versionRef.current !== observableValue.valueVersion) {
-            update();
-        }
-        return () => subscription();
-    }, [observableValue, update]);
-    return observableValue.getError();
-}
-
-function useAsyncValue(observableValue) {
-    const update = useUpdate();
-    const versionRef = useRef(observableValue.valueVersion);
-    useLayoutEffect(() => {
-        const unsubscribe = observableValue.onChange(update);
-        if (versionRef.current !== observableValue.valueVersion) {
-            update();
-        }
-        return () => unsubscribe();
-    }, [observableValue, update]);
-    return observableValue.getValue();
-}
-
-function useAsyncStatus(runner) {
-    const status = useAsyncValue("status" in runner ? runner.status : runner);
-    // We use the same object to reduce memory churn.
-    const [statusObject] = useState(() => ({
-        status: status,
-        isInitial: status === Status.INITIAL,
-        isPending: status === Status.PENDING,
-        isSuccess: status === Status.SUCCESS,
-        isError: status === Status.ERROR,
-    }));
-    statusObject.status = status;
-    statusObject.isInitial = status === Status.INITIAL;
-    statusObject.isPending = status === Status.PENDING;
-    statusObject.isSuccess = status === Status.SUCCESS;
-    statusObject.isError = status === Status.ERROR;
-    return statusObject;
-}
-
-function useAsyncState(asyncActionRunner) {
-    const value = useAsyncValue(asyncActionRunner);
-    const error = useAsyncError(asyncActionRunner);
-    const status = useAsyncStatus(asyncActionRunner);
-    return Object.assign({ value,
-        error }, status);
-}
-
-function useAsyncValueEffect(callback, observableValue) {
-    const callbackRef = useRef(callback);
-    const version = useRef(observableValue.valueVersion);
-    useLayoutEffect(() => {
-        callbackRef.current = callback;
-    }, [callback]);
-    useLayoutEffect(() => {
-        const unsubscribe = observableValue.onChange((value) => {
-            callbackRef.current(value);
-        });
-        if (version.current !== observableValue.valueVersion) {
-            callbackRef.current(observableValue.getValue());
-        }
-        return () => {
-            unsubscribe();
-        };
-    }, [observableValue]);
-    useLayoutEffect(() => {
-        callbackRef.current(observableValue.getValue());
-    }, [observableValue]);
-}
-
-function useAsyncStatusEffect(callback, runner) {
-    const callbackRef = useRef(callback);
-    // We use the same object to reduce memory churn.
-    const [statusObject] = useState(() => {
-        return {
-            status: Status.INITIAL,
-            isInitial: true,
-            isPending: false,
-            isSuccess: false,
-            isError: false,
-        };
-    });
-    return useAsyncValueEffect(status => {
-        statusObject.status = status;
-        statusObject.isInitial = status === Status.INITIAL;
-        statusObject.isPending = status === Status.PENDING;
-        statusObject.isSuccess = status === Status.SUCCESS;
-        statusObject.isError = status === Status.ERROR;
-        callbackRef.current(statusObject);
-    }, runner.status);
-}
-
-export { AsyncActionRunner, DistinctValue, ObservableValue, WeakPromise, useAsyncError, useAsyncErrorEffect, useAsyncState, useAsyncStatus, useAsyncStatusEffect, useAsyncValue, useAsyncValueEffect, useUpdate };
+export { AsyncActionRunner, DistinctValue, ObservableValue, Status, WeakPromise };
 //# sourceMappingURL=index.esm.js.map

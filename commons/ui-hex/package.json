@@ -1,6 +1,7 @@
 {
   "name": "ui-hex",
-  "version": "0.0.2",
+  "type": "module",
+  "version": "0.0.0",
   "description": "Hex library.",
   "private": true,
   "main": "./dist/index.js",
@@ -13,11 +14,6 @@
   },
   "author": "Jared J. Barnes",
   "license": "MIT",
-  "peerDependencies": {
-    "@types/react": "*",
-    "react": "*",
-    "react-dom": "*"
-  },
   "devDependencies": {
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^26.0.20",
@@ -28,6 +24,7 @@
     "rollup": "^2.41.2",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-typescript2": "^0.30.0",
     "ts-jest": "^26.5.3",
     "ts-node": "^10.9.1",

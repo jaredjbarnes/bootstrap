@@ -2,6 +2,12 @@
   "private": true,
   "workspaces": [
     "commons/ui-hex",
-    "commons/ui-bootstrap"
-  ]
+    "commons/ui-hex-hooks",
+    "commons/ui-bootstrap",
+    "apps/example"
+  ],
+  "dependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  }
 }

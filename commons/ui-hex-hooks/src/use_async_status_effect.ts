@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import {
   ReadonlyAsyncActionRunner,
   Status,
-} from '../async_action_runner';
+} from 'ui-hex';
 import { StatusHelper } from './use_async_status';
 import { useAsyncValueEffect } from './use_async_value_effect';
 

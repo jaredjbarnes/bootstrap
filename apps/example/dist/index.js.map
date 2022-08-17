@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.tsx"],
+  "sourcesContent": ["export function onMount(element) {\n  element.innerHTML = \"Hello World!\";\n}\n\nexport function onUnmount() {}\n"],
+  "mappings": "AAAO,SAASA,EAAQC,EAAS,CAC/BA,EAAQ,UAAY,cACtB,CAEO,SAASC,GAAY,CAAC",
+  "names": ["onMount", "element", "onUnmount"]
+}
